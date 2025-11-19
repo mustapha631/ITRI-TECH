@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Primary Colors - Safety Authority */
+  --color-primary: #2d5016; /* Deep forest authority for trust moments */
+  --color-primary-50: #f0f4ed;
+  --color-primary-100: #dce8d1;
+  --color-primary-200: #b9d1a3;
+  --color-primary-300: #96ba75;
+  --color-primary-400: #73a347;
+  --color-primary-500: #2d5016; /* Primary */
+  --color-primary-600: #244015;
+  --color-primary-700: #1b3010;
+  --color-primary-800: #12200b;
+  --color-primary-900: #091006;
+
+  /* Secondary Colors - Growth Green */
+  --color-secondary: #66a83e; /* Growth green for positive actions */
+  --color-secondary-50: #f2f8ed;
+  --color-secondary-100: #e5f1db;
+  --color-secondary-200: #cbe3b7;
+  --color-secondary-300: #b1d593;
+  --color-secondary-400: #97c76f;
+  --color-secondary-500: #66a83e; /* Secondary */
+  --color-secondary-600: #528632;
+  --color-secondary-700: #3e6426;
+  --color-secondary-800: #2a421a;
+  --color-secondary-900: #16210e;
+
+  /* Accent Colors - Safety Orange */
+  --color-accent: #ff6b35; /* Safety orange for urgent CTAs */
+  --color-accent-50: #fff5f2;
+  --color-accent-100: #ffebe5;
+  --color-accent-200: #ffd7cc;
+  --color-accent-300: #ffc3b2;
+  --color-accent-400: #ffaf99;
+  --color-accent-500: #ff6b35; /* Accent */
+  --color-accent-600: #cc562a;
+  --color-accent-700: #99401f;
+  --color-accent-800: #662b15;
+  --color-accent-900: #33150a;
+
+  /* Background Colors */
+  --color-background: #fafafa; /* Clean canvas for product photography */
+  --color-surface: #ffffff; /* Pure product showcase backgrounds */
+
+  /* Text Colors */
+  --color-text-primary: #1a1a1a; /* Extended reading without strain */
+  --color-text-secondary: #666666; /* Clear information hierarchy */
+
+  /* Status Colors */
+  --color-success: #22c55e; /* Purchase confirmation and positive feedback */
+  --color-warning: #f59e0b; /* Stock alerts and important notices */
+  --color-error: #ef4444; /* Form validation with helpful concern */
+
+  /* Border Colors */
+  --color-border: #e5e5e5; /* Clean borders for forms and content separation */
+  --color-border-light: #f0f0f0;
+  --color-border-dark: #d1d1d1;
+
+  /* Shadow Colors */
+  --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle depth for interactive elements */
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08); /* Product cards */
+  --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.12); /* Hover states */
+
+  /* Animation Timing */
+  --transition-fast: 300ms ease-out; /* Hover states and form interactions */
+  --transition-premium: 400ms ease-out; /* Product image transitions */
+}
+
+@layer base {
+  html {
+    font-family: 'Inter', sans-serif;
+  }
+  
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .font-technical {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  /* Button Components */
+  .btn-primary {
+    @apply bg-primary text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:bg-primary-600 hover:shadow-hover;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:bg-secondary-600 hover:shadow-hover;
+  }
+
+  .btn-accent {
+    @apply bg-accent text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:bg-accent-600 hover:shadow-hover;
+  }
+
+  .btn-outline {
+    @apply border-2 border-primary text-primary px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:bg-primary hover:text-white;
+  }
+
+  /* Card Components */
+  .card {
+    @apply bg-surface rounded-lg shadow-subtle transition-all duration-300 hover:shadow-card;
+  }
+
+  .card-product {
+    @apply bg-surface rounded-lg shadow-subtle transition-all duration-400 hover:shadow-hover;
+  }
+
+  /* Form Components */
+  .form-input {
+    @apply w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-text-primary mb-2;
+  }
+
+  /* Text Utilities */
+  .text-technical {
+    @apply font-technical text-sm text-text-secondary;
+  }
+
+  .text-heading {
+    @apply font-semibold text-text-primary;
+  }
+
+  .text-body {
+    @apply text-text-primary leading-relaxed;
+  }
+
+  .text-caption {
+    @apply text-sm text-text-secondary;
+  }
+}
+
+@layer utilities {
+  /* Animation Utilities */
+  .transition-fast {
+    transition: all var(--transition-fast);
+  }
+
+  .transition-premium {
+    transition: all var(--transition-premium);
+  }
+
+  /* Shadow Utilities */
+  .shadow-subtle {
+    box-shadow: var(--shadow-subtle);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-hover {
+    box-shadow: var(--shadow-hover);
+  }
+}
