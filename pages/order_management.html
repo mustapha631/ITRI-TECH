@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Commandes - ITRITECH Enhanced</title>
+    <meta name="description" content="Système de commande et suivi sécurisé pour produits LED ITRITECH. Checkout simplifié, suivi en temps réel, et gestion des commandes professionnelles.">
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  
+  <script type="module" async src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fitriteche7735back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.9"></script>
+  <script type="module" defer src="https://static.rocket.new/rocket-shot.js?v=0.0.1"></script>
+  </head>
+<body class="bg-background min-h-screen">
+    <!-- Language Toggle & Header -->
+    <header class="bg-surface shadow-subtle sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <svg class="h-10 w-10 text-primary" viewBox="0 0 40 40" fill="currentColor">
+                        <circle cx="20" cy="20" r="18" fill="url(#logoGradient)"/>
+                        <path d="M15 12h10v3h-10zm0 5h10v3h-10zm0 5h6v3h-6z" fill="white"/>
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#2d5016"/>
+                                <stop offset="100%" style="stop-color:#66a83e"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span class="ml-3 text-xl font-bold text-primary">ITRITECH</span>
+                </div>
+
+                <!-- Language Toggle -->
+                <div class="flex items-center space-x-4">
+                    <div class="flex bg-gray-100 rounded-lg p-1">
+                        <button id="langFr" class="px-3 py-1 rounded-md text-sm font-medium bg-primary text-white transition-all duration-300">
+                            FR
+                        </button>
+                        <button id="langAr" class="px-3 py-1 rounded-md text-sm font-medium text-gray-600 hover:text-primary transition-all duration-300">
+                            العربية
+                        </button>
+                    </div>
+                    <div class="relative">
+                        <button class="flex items-center text-gray-600 hover:text-primary">
+                            <i class="fas fa-shopping-cart text-lg"></i>
+                            <span id="cartCount" class="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-text-primary mb-2" data-fr="Gestion des Commandes" data-ar="إدارة الطلبات">Gestion des Commandes</h1>
+            <p class="text-text-secondary" data-fr="Commandez vos produits LED en toute sécurité et suivez vos livraisons en temps réel" data-ar="اطلب منتجات LED الخاصة بك بأمان وتتبع التسليم في الوقت الفعلي">Commandez vos produits LED en toute sécurité et suivez vos livraisons en temps réel</p>
+        </div>
+
+        <!-- Order Management Tabs -->
+        <div class="mb-8">
+            <div class="border-b border-border">
+                <nav class="-mb-px flex space-x-8">
+                    <button id="tabCart" class="tab-button active py-2 px-1 border-b-2 border-primary font-medium text-sm text-primary" data-fr="Panier" data-ar="السلة">
+                        <i class="fas fa-shopping-cart mr-2"></i>Panier
+                    </button>
+                    <button id="tabCheckout" class="tab-button py-2 px-1 border-b-2 border-transparent font-medium text-sm text-text-secondary hover:text-primary hover:border-gray-300" data-fr="Commande" data-ar="الطلب">
+                        <i class="fas fa-credit-card mr-2"></i>Commande
+                    </button>
+                    <button id="tabTracking" class="tab-button py-2 px-1 border-b-2 border-transparent font-medium text-sm text-text-secondary hover:text-primary hover:border-gray-300" data-fr="Suivi" data-ar="التتبع">
+                        <i class="fas fa-truck mr-2"></i>Suivi
+                    </button>
+                    <button id="tabHistory" class="tab-button py-2 px-1 border-b-2 border-transparent font-medium text-sm text-text-secondary hover:text-primary hover:border-gray-300" data-fr="Historique" data-ar="التاريخ">
+                        <i class="fas fa-history mr-2"></i>Historique
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Shopping Cart Tab -->
+        <div id="cartTab" class="tab-content">
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Cart Items -->
+                <div class="lg:col-span-2">
+                    <div class="card p-6">
+                        <h2 class="text-xl font-semibold text-text-primary mb-6" data-fr="Votre Panier (3 articles)" data-ar="سلتك (3 عناصر)">Votre Panier (3 articles)</h2>
+                        
+                        <!-- Cart Item 1 -->
+                        <div class="flex items-center space-x-4 p-4 border border-border rounded-lg mb-4">
+                            <img src="https://images.unsplash.com/photo-1721919222714-31e642131e6d" 
+                                 alt="Kit LED H7 6000K haute performance pour phares automobiles" 
+                                 class="w-20 h-20 object-cover rounded-lg"
+                                 onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;">
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-text-primary" data-fr="Kit LED H7 6000K" data-ar="مجموعة LED H7 6000K">Kit LED H7 6000K</h3>
+                                <p class="text-text-secondary text-sm" data-fr="Haute performance, garantie 2 ans" data-ar="أداء عالي، ضمان سنتان">Haute performance, garantie 2 ans</p>
+                                <div class="flex items-center mt-2">
+                                    <button class="text-text-secondary hover:text-primary">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span class="mx-3 font-medium">2</span>
+                                    <button class="text-text-secondary hover:text-primary">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-semibold text-text-primary">450 DHS</p>
+                                <button class="text-error hover:text-red-700 text-sm mt-1">
+                                    <i class="fas fa-trash mr-1"></i><span data-fr="Supprimer" data-ar="حذف">Supprimer</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Cart Item 2 -->
+                        <div class="flex items-center space-x-4 p-4 border border-border rounded-lg mb-4">
+                            <img src="https://images.unsplash.com/photo-1572249930263-64fc5bbdb14b" 
+                                 alt="Bande LED flexible RGB 5m avec télécommande pour éclairage d'ambiance" 
+                                 class="w-20 h-20 object-cover rounded-lg"
+                                 onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;">
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-text-primary" data-fr="Bande LED RGB 5m" data-ar="شريط LED RGB 5 متر">Bande LED RGB 5m</h3>
+                                <p class="text-text-secondary text-sm" data-fr="Avec télécommande, étanche IP65" data-ar="مع جهاز التحكم عن بعد، مقاوم للماء IP65">Avec télécommande, étanche IP65</p>
+                                <div class="flex items-center mt-2">
+                                    <button class="text-text-secondary hover:text-primary">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span class="mx-3 font-medium">1</span>
+                                    <button class="text-text-secondary hover:text-primary">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-semibold text-text-primary">280 DHS</p>
+                                <button class="text-error hover:text-red-700 text-sm mt-1">
+                                    <i class="fas fa-trash mr-1"></i><span data-fr="Supprimer" data-ar="حذف">Supprimer</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Professional Bulk Options -->
+                        <div class="bg-primary-50 p-4 rounded-lg mt-6">
+                            <h3 class="font-semibold text-primary mb-2" data-fr="Commande Professionnelle" data-ar="طلب مهني">Commande Professionnelle</h3>
+                            <p class="text-text-secondary text-sm mb-3" data-fr="Bénéficiez de tarifs préférentiels pour les commandes en gros" data-ar="استفد من الأسعار التفضيلية للطلبات بالجملة">Bénéficiez de tarifs préférentiels pour les commandes en gros</p>
+                            <button class="btn-outline text-sm" data-fr="Accéder aux tarifs pro" data-ar="الوصول إلى الأسعار المهنية">Accéder aux tarifs pro</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="lg:col-span-1">
+                    <div class="card p-6 sticky top-24">
+                        <h3 class="text-lg font-semibold text-text-primary mb-4" data-fr="Résumé de la commande" data-ar="ملخص الطلب">Résumé de la commande</h3>
+                        
+                        <div class="space-y-3 mb-4">
+                            <div class="flex justify-between">
+                                <span class="text-text-secondary" data-fr="Sous-total" data-ar="المجموع الفرعي">Sous-total</span>
+                                <span class="font-medium">730 DHS</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-text-secondary" data-fr="Livraison" data-ar="التوصيل">Livraison</span>
+                                <span class="font-medium">50 DHS</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-text-secondary" data-fr="TVA (20%)" data-ar="ضريبة القيمة المضافة (20%)">TVA (20%)</span>
+                                <span class="font-medium">156 DHS</span>
+                            </div>
+                            <hr class="border-border">
+                            <div class="flex justify-between text-lg font-semibold">
+                                <span data-fr="Total" data-ar="المجموع">Total</span>
+                                <span>936 DHS</span>
+                            </div>
+                            <p class="text-sm text-text-secondary" data-fr="≈ 88 EUR" data-ar="≈ 88 يورو">≈ 88 EUR</p>
+                        </div>
+
+                        <button class="btn-primary w-full mb-3" onclick="switchTab('checkout')" data-fr="Procéder au paiement" data-ar="المتابعة للدفع">
+                            <i class="fas fa-lock mr-2"></i>Procéder au paiement
+                        </button>
+                        
+                        <button class="btn-outline w-full text-sm" data-fr="Continuer les achats" data-ar="متابعة التسوق">Continuer les achats</button>
+
+                        <!-- Trust Badges -->
+                        <div class="mt-6 pt-4 border-t border-border">
+                            <div class="flex items-center justify-center space-x-4 text-xs text-text-secondary">
+                                <div class="flex items-center">
+                                    <i class="fas fa-shield-alt text-success mr-1"></i>
+                                    <span data-fr="Sécurisé" data-ar="آمن">Sécurisé</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-truck text-primary mr-1"></i>
+                                    <span data-fr="Livraison rapide" data-ar="توصيل سريع">Livraison rapide</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-medal text-warning mr-1"></i>
+                                    <span data-fr="Garantie" data-ar="ضمان">Garantie</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checkout Tab -->
+        <div id="checkoutTab" class="tab-content hidden">
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Checkout Form -->
+                <div class="lg:col-span-2">
+                    <div class="card p-6">
+                        <h2 class="text-xl font-semibold text-text-primary mb-6" data-fr="Informations de livraison" data-ar="معلومات التسليم">Informations de livraison</h2>
+                        
+                        <form id="checkoutForm" class="space-y-6">
+                            <!-- Customer Type -->
+                            <div>
+                                <label class="form-label" data-fr="Type de client" data-ar="نوع العميل">Type de client</label>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="customerType" value="individual" checked class="mr-2">
+                                        <span data-fr="Particulier" data-ar="فرد">Particulier</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="customerType" value="professional" class="mr-2">
+                                        <span data-fr="Professionnel" data-ar="مهني">Professionnel</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Personal Information -->
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="form-label" data-fr="Prénom" data-ar="الاسم الأول">Prénom</label>
+                                    <input type="text" class="form-input" placeholder="Ahmed" required>
+                                </div>
+                                <div>
+                                    <label class="form-label" data-fr="Nom" data-ar="اسم العائلة">Nom</label>
+                                    <input type="text" class="form-input" placeholder="Benali" required>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="form-label" data-fr="Email" data-ar="البريد الإلكتروني">Email</label>
+                                <input type="email" class="form-input" placeholder="ahmed.benali@email.com" required>
+                            </div>
+
+                            <div>
+                                <label class="form-label" data-fr="Téléphone" data-ar="الهاتف">Téléphone</label>
+                                <input type="tel" class="form-input" placeholder="+212 6 12 34 56 78" required>
+                            </div>
+
+                            <!-- Shipping Address -->
+                            <div>
+                                <label class="form-label" data-fr="Adresse de livraison" data-ar="عنوان التسليم">Adresse de livraison</label>
+                                <input type="text" class="form-input" placeholder="123 Rue Mohammed V" required>
+                            </div>
+
+                            <div class="grid md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="form-label" data-fr="Ville" data-ar="المدينة">Ville</label>
+                                    <select class="form-input" required>
+                                        <option value="">Sélectionner</option>
+                                        <option value="casablanca">Casablanca</option>
+                                        <option value="rabat">Rabat</option>
+                                        <option value="marrakech">Marrakech</option>
+                                        <option value="fes">Fès</option>
+                                        <option value="tangier">Tanger</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="form-label" data-fr="Code postal" data-ar="الرمز البريدي">Code postal</label>
+                                    <input type="text" class="form-input" placeholder="20000" required>
+                                </div>
+                                <div>
+                                    <label class="form-label" data-fr="Pays" data-ar="البلد">Pays</label>
+                                    <select class="form-input" required>
+                                        <option value="ma">Maroc</option>
+                                        <option value="fr">France</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Delivery Options -->
+                            <div>
+                                <label class="form-label" data-fr="Options de livraison" data-ar="خيارات التسليم">Options de livraison</label>
+                                <div class="space-y-3">
+                                    <label class="flex items-center p-3 border border-border rounded-lg cursor-pointer hover:bg-gray-50">
+                                        <input type="radio" name="delivery" value="standard" checked class="mr-3">
+                                        <div class="flex-1">
+                                            <div class="font-medium" data-fr="Livraison standard" data-ar="التسليم العادي">Livraison standard</div>
+                                            <div class="text-sm text-text-secondary" data-fr="3-5 jours ouvrables" data-ar="3-5 أيام عمل">3-5 jours ouvrables</div>
+                                        </div>
+                                        <span class="font-medium">50 DHS</span>
+                                    </label>
+                                    <label class="flex items-center p-3 border border-border rounded-lg cursor-pointer hover:bg-gray-50">
+                                        <input type="radio" name="delivery" value="express" class="mr-3">
+                                        <div class="flex-1">
+                                            <div class="font-medium" data-fr="Livraison express" data-ar="التسليم السريع">Livraison express</div>
+                                            <div class="text-sm text-text-secondary" data-fr="24-48 heures" data-ar="24-48 ساعة">24-48 heures</div>
+                                        </div>
+                                        <span class="font-medium">120 DHS</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Payment Method -->
+                            <div>
+                                <label class="form-label" data-fr="Mode de paiement" data-ar="طريقة الدفع">Mode de paiement</label>
+                                <div class="space-y-3">
+                                    <label class="flex items-center p-3 border border-border rounded-lg cursor-pointer hover:bg-gray-50">
+                                        <input type="radio" name="payment" value="card" checked class="mr-3">
+                                        <i class="fas fa-credit-card text-primary mr-3"></i>
+                                        <span data-fr="Carte bancaire" data-ar="بطاقة مصرفية">Carte bancaire</span>
+                                    </label>
+                                    <label class="flex items-center p-3 border border-border rounded-lg cursor-pointer hover:bg-gray-50">
+                                        <input type="radio" name="payment" value="cash" class="mr-3">
+                                        <i class="fas fa-money-bill text-success mr-3"></i>
+                                        <span data-fr="Paiement à la livraison" data-ar="الدفع عند التسليم">Paiement à la livraison</span>
+                                    </label>
+                                    <label class="flex items-center p-3 border border-border rounded-lg cursor-pointer hover:bg-gray-50">
+                                        <input type="radio" name="payment" value="transfer" class="mr-3">
+                                        <i class="fas fa-university text-secondary mr-3"></i>
+                                        <span data-fr="Virement bancaire" data-ar="تحويل مصرفي">Virement bancaire</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Guest Checkout Option -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-3">
+                                    <span class="text-sm" data-fr="Créer un compte pour suivre mes commandes" data-ar="إنشاء حساب لتتبع طلباتي">Créer un compte pour suivre mes commandes</span>
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Order Summary (Checkout) -->
+                <div class="lg:col-span-1">
+                    <div class="card p-6 sticky top-24">
+                        <h3 class="text-lg font-semibold text-text-primary mb-4" data-fr="Votre commande" data-ar="طلبك">Votre commande</h3>
+                        
+                        <!-- Order Items -->
+                        <div class="space-y-3 mb-4">
+                            <div class="flex justify-between text-sm">
+                                <span>Kit LED H7 6000K × 2</span>
+                                <span>450 DHS</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>Bande LED RGB 5m × 1</span>
+                                <span>280 DHS</span>
+                            </div>
+                        </div>
+
+                        <hr class="border-border mb-4">
+
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-sm">
+                                <span data-fr="Sous-total" data-ar="المجموع الفرعي">Sous-total</span>
+                                <span>730 DHS</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span data-fr="Livraison" data-ar="التوصيل">Livraison</span>
+                                <span>50 DHS</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span data-fr="TVA" data-ar="ضريبة القيمة المضافة">TVA</span>
+                                <span>156 DHS</span>
+                            </div>
+                            <hr class="border-border">
+                            <div class="flex justify-between font-semibold">
+                                <span data-fr="Total" data-ar="المجموع">Total</span>
+                                <span>936 DHS</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" form="checkoutForm" class="btn-primary w-full mb-3" data-fr="Confirmer la commande" data-ar="تأكيد الطلب">
+                            <i class="fas fa-check mr-2"></i>Confirmer la commande
+                        </button>
+
+                        <!-- Security Notice -->
+                        <div class="text-xs text-text-secondary text-center">
+                            <i class="fas fa-lock mr-1"></i>
+                            <span data-fr="Paiement 100% sécurisé SSL" data-ar="دفع آمن 100% SSL">Paiement 100% sécurisé SSL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Tracking Tab -->
+        <div id="trackingTab" class="tab-content hidden">
+            <div class="max-w-4xl mx-auto">
+                <!-- Track Order Form -->
+                <div class="card p-6 mb-8">
+                    <h2 class="text-xl font-semibold text-text-primary mb-6" data-fr="Suivre votre commande" data-ar="تتبع طلبك">Suivre votre commande</h2>
+                    <div class="flex space-x-4">
+                        <input type="text" class="form-input flex-1" placeholder="Numéro de commande (ex: ITR-2025-001234)" data-fr-placeholder="Numéro de commande (ex: ITR-2025-001234)" data-ar-placeholder="رقم الطلب (مثال: ITR-2025-001234)">
+                        <button class="btn-primary" data-fr="Suivre" data-ar="تتبع">
+                            <i class="fas fa-search mr-2"></i>Suivre
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Current Order Status -->
+                <div class="card p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-text-primary" data-fr="Commande #ITR-2025-001234" data-ar="الطلب #ITR-2025-001234">Commande #ITR-2025-001234</h3>
+                            <p class="text-text-secondary" data-fr="Passée le 10 novembre 2025" data-ar="تم الطلب في 10 نوفمبر 2025">Passée le 10 novembre 2025</p>
+                        </div>
+                        <span class="bg-warning text-white px-3 py-1 rounded-full text-sm font-medium" data-fr="En transit" data-ar="في الطريق">En transit</span>
+                    </div>
+
+                    <!-- Progress Timeline -->
+                    <div class="relative">
+                        <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
+                        
+                        <!-- Step 1 - Completed -->
+                        <div class="relative flex items-center mb-8">
+                            <div class="flex-shrink-0 w-8 h-8 bg-success rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-white text-sm"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="font-medium text-text-primary" data-fr="Commande confirmée" data-ar="تم تأكيد الطلب">Commande confirmée</h4>
+                                <p class="text-sm text-text-secondary" data-fr="10 nov. 2025, 14:30" data-ar="10 نوفمبر 2025، 14:30">10 nov. 2025, 14:30</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 - Completed -->
+                        <div class="relative flex items-center mb-8">
+                            <div class="flex-shrink-0 w-8 h-8 bg-success rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-white text-sm"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="font-medium text-text-primary" data-fr="Préparation en cours" data-ar="قيد التحضير">Préparation en cours</h4>
+                                <p class="text-sm text-text-secondary" data-fr="11 nov. 2025, 09:15" data-ar="11 نوفمبر 2025، 09:15">11 nov. 2025, 09:15</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 - Current -->
+                        <div class="relative flex items-center mb-8">
+                            <div class="flex-shrink-0 w-8 h-8 bg-warning rounded-full flex items-center justify-center">
+                                <i class="fas fa-truck text-white text-sm"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="font-medium text-text-primary" data-fr="En transit" data-ar="في الطريق">En transit</h4>
+                                <p class="text-sm text-text-secondary" data-fr="12 nov. 2025, 08:00" data-ar="12 نوفمبر 2025، 08:00">12 nov. 2025, 08:00</p>
+                                <p class="text-sm text-primary font-medium" data-fr="Arrivée prévue: 13 nov. 2025" data-ar="الوصول المتوقع: 13 نوفمبر 2025">Arrivée prévue: 13 nov. 2025</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 - Pending -->
+                        <div class="relative flex items-center">
+                            <div class="flex-shrink-0 w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                                <i class="fas fa-home text-white text-sm"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="font-medium text-gray-400" data-fr="Livré" data-ar="تم التسليم">Livré</h4>
+                                <p class="text-sm text-gray-400" data-fr="En attente" data-ar="في الانتظار">En attente</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Info -->
+                    <div class="mt-8 p-4 bg-primary-50 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-info-circle text-primary mr-2"></i>
+                            <h4 class="font-medium text-primary" data-fr="Informations de livraison" data-ar="معلومات التسليم">Informations de livraison</h4>
+                        </div>
+                        <p class="text-sm text-text-secondary" data-fr="Transporteur: Amana Express | Numéro de suivi: AMX789456123" data-ar="شركة النقل: أمانة إكسبريس | رقم التتبع: AMX789456123">Transporteur: Amana Express | Numéro de suivi: AMX789456123</p>
+                        <div class="mt-3 flex space-x-4">
+                            <button class="text-primary text-sm font-medium hover:underline" data-fr="Contacter le transporteur" data-ar="الاتصال بشركة النقل">Contacter le transporteur</button>
+                            <button class="text-primary text-sm font-medium hover:underline" data-fr="Modifier l'adresse" data-ar="تعديل العنوان">Modifier l'adresse</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order History Tab -->
+        <div id="historyTab" class="tab-content hidden">
+            <div class="max-w-6xl mx-auto">
+                <!-- Account Login -->
+                <div class="card p-6 mb-8">
+                    <h2 class="text-xl font-semibold text-text-primary mb-6" data-fr="Historique des commandes" data-ar="تاريخ الطلبات">Historique des commandes</h2>
+                    
+                    <!-- Login Form -->
+                    <div class="max-w-md mx-auto">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="form-label" data-fr="Email" data-ar="البريد الإلكتروني">Email</label>
+                                <input type="email" class="form-input" placeholder="customer@example.com" value="customer@example.com">
+                            </div>
+                            <div>
+                                <label class="form-label" data-fr="Mot de passe" data-ar="كلمة المرور">Mot de passe</label>
+                                <input type="password" class="form-input" placeholder="password123" value="password123">
+                            </div>
+                            <button class="btn-primary w-full" onclick="showOrderHistory()" data-fr="Se connecter" data-ar="تسجيل الدخول">
+                                <i class="fas fa-sign-in-alt mr-2"></i>Se connecter
+                            </button>
+                        </div>
+                        <p class="text-center text-sm text-text-secondary mt-4" data-fr="Comptes de démonstration disponibles:" data-ar="حسابات تجريبية متاحة:">Comptes de démonstration disponibles:</p>
+                        <div class="text-xs text-text-secondary mt-2 space-y-1">
+                            <p>• customer@example.com / password123</p>
+                            <p>• installer@pro.com / installer456</p>
+                            <p>• admin@itritech.com / admin123</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order History List -->
+                <div id="orderHistoryList" class="hidden space-y-6">
+                    <!-- Recent Order -->
+                    <div class="card p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-text-primary" data-fr="Commande #ITR-2025-001234" data-ar="الطلب #ITR-2025-001234">Commande #ITR-2025-001234</h3>
+                                <p class="text-text-secondary text-sm" data-fr="10 novembre 2025" data-ar="10 نوفمبر 2025">10 novembre 2025</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-semibold text-text-primary">936 DHS</p>
+                                <span class="bg-warning text-white px-2 py-1 rounded text-xs" data-fr="En transit" data-ar="في الطريق">En transit</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4 mb-4">
+                            <img src="https://images.unsplash.com/photo-1696581081878-ab53484419ed" 
+                                 alt="Kit LED H7 6000K pour éclairage automobile haute performance" 
+                                 class="w-12 h-12 object-cover rounded"
+                                 onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;">
+                            <div class="flex-1">
+                                <p class="font-medium" data-fr="Kit LED H7 6000K × 2" data-ar="مجموعة LED H7 6000K × 2">Kit LED H7 6000K × 2</p>
+                                <p class="text-text-secondary text-sm" data-fr="Bande LED RGB 5m × 1" data-ar="شريط LED RGB 5 متر × 1">Bande LED RGB 5m × 1</p>
+                            </div>
+                        </div>
+                        <div class="flex space-x-4">
+                            <button class="btn-outline text-sm" onclick="switchTab('tracking')" data-fr="Suivre" data-ar="تتبع">
+                                <i class="fas fa-truck mr-1"></i>Suivre
+                            </button>
+                            <button class="text-primary text-sm font-medium hover:underline" data-fr="Voir les détails" data-ar="عرض التفاصيل">Voir les détails</button>
+                            <button class="text-primary text-sm font-medium hover:underline" data-fr="Télécharger facture" data-ar="تحميل الفاتورة">Télécharger facture</button>
+                        </div>
+                    </div>
+
+                    <!-- Previous Order -->
+                    <div class="card p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-text-primary" data-fr="Commande #ITR-2025-001198" data-ar="الطلب #ITR-2025-001198">Commande #ITR-2025-001198</h3>
+                                <p class="text-text-secondary text-sm" data-fr="28 octobre 2025" data-ar="28 أكتوبر 2025">28 octobre 2025</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-semibold text-text-primary">1,250 DHS</p>
+                                <span class="bg-success text-white px-2 py-1 rounded text-xs" data-fr="Livré" data-ar="تم التسليم">Livré</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4 mb-4">
+                            <img src="https://images.unsplash.com/photo-1702324767579-b156b73d13a3" 
+                                 alt="Projecteurs LED de travail étanches pour véhicules professionnels" 
+                                 class="w-12 h-12 object-cover rounded"
+                                 onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;">
+                            <div class="flex-1">
+                                <p class="font-medium" data-fr="Projecteurs LED de travail × 4" data-ar="كشافات LED للعمل × 4">Projecteurs LED de travail × 4</p>
+                                <p class="text-text-secondary text-sm" data-fr="Contrôleur RGB intelligent × 1" data-ar="وحدة تحكم RGB ذكية × 1">Contrôleur RGB intelligent × 1</p>
+                            </div>
+                        </div>
+                        <div class="flex space-x-4">
+                            <button class="btn-outline text-sm" data-fr="Recommander" data-ar="إعادة الطلب">
+                                <i class="fas fa-redo mr-1"></i>Recommander
+                            </button>
+                            <button class="text-primary text-sm font-medium hover:underline" data-fr="Laisser un avis" data-ar="ترك تقييم">Laisser un avis</button>
+                            <button class="text-primary text-sm font-medium hover:underline" data-fr="Support technique" data-ar="الدعم الفني">Support technique</button>
+                        </div>
+                    </div>
+
+                    <!-- Professional Account Features -->
+                    <div class="card p-6 bg-primary-50">
+                        <h3 class="font-semibold text-primary mb-4" data-fr="Fonctionnalités Professionnelles" data-ar="الميزات المهنية">Fonctionnalités Professionnelles</h3>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="text-center">
+                                <i class="fas fa-chart-line text-primary text-2xl mb-2"></i>
+                                <h4 class="font-medium text-text-primary" data-fr="Rapports d'achat" data-ar="تقارير الشراء">Rapports d'achat</h4>
+                                <p class="text-sm text-text-secondary" data-fr="Analyses détaillées" data-ar="تحليلات مفصلة">Analyses détaillées</p>
+                            </div>
+                            <div class="text-center">
+                                <i class="fas fa-users text-primary text-2xl mb-2"></i>
+                                <h4 class="font-medium text-text-primary" data-fr="Gestion d'équipe" data-ar="إدارة الفريق">Gestion d'équipe</h4>
+                                <p class="text-sm text-text-secondary" data-fr="Comptes multiples" data-ar="حسابات متعددة">Comptes multiples</p>
+                            </div>
+                            <div class="text-center">
+                                <i class="fas fa-percent text-primary text-2xl mb-2"></i>
+                                <h4 class="font-medium text-text-primary" data-fr="Tarifs préférentiels" data-ar="أسعار تفضيلية">Tarifs préférentiels</h4>
+                                <p class="text-sm text-text-secondary" data-fr="Remises volume" data-ar="خصومات الكمية">Remises volume</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- WhatsApp Integration -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <button class="bg-success hover:bg-green-600 text-white p-4 rounded-full shadow-hover transition-all duration-300" title="Support WhatsApp">
+            <i class="fab fa-whatsapp text-xl"></i>
+        </button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <svg class="h-8 w-8 text-white" viewBox="0 0 40 40" fill="currentColor">
+                            <circle cx="20" cy="20" r="18" fill="url(#footerGradient)"/>
+                            <path d="M15 12h10v3h-10zm0 5h10v3h-10zm0 5h6v3h-6z" fill="white"/>
+                            <defs>
+                                <linearGradient id="footerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#66a83e"/>
+                                    <stop offset="100%" style="stop-color:#2d5016"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <span class="ml-2 text-lg font-bold">ITRITECH</span>
+                    </div>
+                    <p class="text-primary-200 text-sm" data-fr="Solutions LED innovantes pour votre sécurité et votre style" data-ar="حلول LED مبتكرة لسلامتك وأناقتك">Solutions LED innovantes pour votre sécurité et votre style</p>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-4" data-fr="Support Client" data-ar="دعم العملاء">Support Client</h3>
+                    <ul class="space-y-2 text-sm text-primary-200">
+                        <li><a href="javascript:void(0)" class="hover:text-white" data-fr="Centre d'aide" data-ar="مركز المساعدة">Centre d'aide</a></li>
+                        <li><a href="javascript:void(0)" class="hover:text-white" data-fr="Garantie" data-ar="الضمان">Garantie</a></li>
+                        <li><a href="javascript:void(0)" class="hover:text-white" data-fr="Retours" data-ar="المرتجعات">Retours</a></li>
+                        <li><a href="javascript:void(0)" class="hover:text-white" data-fr="Contact" data-ar="اتصل بنا">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-4" data-fr="Informations" data-ar="معلومات">Informations</h3>
+                    <ul class="space-y-2 text-sm text-primary-200">
+                        <li><a href="javascript:void(0)" class="hover:text-white" data-fr="À propos" data-ar="حولنا">À propos</a></li>
+                        <li><a href="javascript:void(0)" class="hover:text-white" data-fr="Livraison" data-ar="التوصيل">Livraison</a></li>
+                        <li><a href="javascript:void(0)" class="hover:text-white" data-fr="Paiement" data-ar="الدفع">Paiement</a></li>
+                        <li><a href="javascript:void(0)" class="hover:text-white" data-fr="Confidentialité" data-ar="الخصوصية">Confidentialité</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-4" data-fr="Suivez-nous" data-ar="تابعنا">Suivez-nous</h3>
+                    <div class="flex space-x-4">
+                        <a href="javascript:void(0)" class="text-primary-200 hover:text-white">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="javascript:void(0)" class="text-primary-200 hover:text-white">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="javascript:void(0)" class="text-primary-200 hover:text-white">
+                            <i class="fab fa-youtube text-xl"></i>
+                        </a>
+                        <a href="javascript:void(0)" class="text-primary-200 hover:text-white">
+                            <i class="fab fa-whatsapp text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="border-primary-600 my-8">
+            
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-primary-200 text-sm" data-fr="© 2025 ITRITECH Enhanced. Tous droits réservés." data-ar="© 2025 ITRITECH Enhanced. جميع الحقوق محفوظة.">© 2025 ITRITECH Enhanced. Tous droits réservés.</p>
+                <div class="flex items-center space-x-4 mt-4 md:mt-0">
+                    <img src="https://images.unsplash.com/photo-1598327105686-be444f3dc064" alt="Certification CE pour conformité européenne" class="h-8 opacity-70">
+                    <img src="https://images.unsplash.com/photo-1627129788674-bd98804f8f60" alt="Certification ISO qualité internationale" class="h-8 opacity-70">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Language switching functionality
+        const langFr = document.getElementById('langFr');
+        const langAr = document.getElementById('langAr');
+        let currentLang = 'fr';
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            const elements = document.querySelectorAll('[data-fr], [data-ar]');
+            
+            elements.forEach(element => {
+                const text = element.getAttribute(`data-${lang}`);
+                if (text) {
+                    element.textContent = text;
+                }
+                
+                const placeholder = element.getAttribute(`data-${lang}-placeholder`);
+                if (placeholder) {
+                    element.placeholder = placeholder;
+                }
+            });
+
+            // Update language toggle buttons
+            if (lang === 'fr') {
+                langFr.classList.add('bg-primary', 'text-white');
+                langFr.classList.remove('text-gray-600');
+                langAr.classList.remove('bg-primary', 'text-white');
+                langAr.classList.add('text-gray-600');
+                document.documentElement.setAttribute('dir', 'ltr');
+                document.documentElement.setAttribute('lang', 'fr');
+            } else {
+                langAr.classList.add('bg-primary', 'text-white');
+                langAr.classList.remove('text-gray-600');
+                langFr.classList.remove('bg-primary', 'text-white');
+                langFr.classList.add('text-gray-600');
+                document.documentElement.setAttribute('dir', 'rtl');
+                document.documentElement.setAttribute('lang', 'ar');
+            }
+        }
+
+        langFr.addEventListener('click', () => switchLanguage('fr'));
+        langAr.addEventListener('click', () => switchLanguage('ar'));
+
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active', 'border-primary', 'text-primary');
+                button.classList.add('border-transparent', 'text-text-secondary');
+            });
+            
+            // Show selected tab content
+            const targetTab = document.getElementById(tabName + 'Tab');
+            if (targetTab) {
+                targetTab.classList.remove('hidden');
+            }
+            
+            // Activate corresponding tab button
+            const targetButton = document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
+            if (targetButton) {
+                targetButton.classList.add('active', 'border-primary', 'text-primary');
+                targetButton.classList.remove('border-transparent', 'text-text-secondary');
+            }
+        }
+
+        // Add event listeners to tab buttons
+        document.getElementById('tabCart').addEventListener('click', () => switchTab('cart'));
+        document.getElementById('tabCheckout').addEventListener('click', () => switchTab('checkout'));
+        document.getElementById('tabTracking').addEventListener('click', () => switchTab('tracking'));
+        document.getElementById('tabHistory').addEventListener('click', () => switchTab('history'));
+
+        // Show order history after login
+        function showOrderHistory() {
+            document.getElementById('orderHistoryList').classList.remove('hidden');
+        }
+
+        // Form submission handling
+        document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show success message
+            alert(currentLang === 'fr' ? 
+                'Commande confirmée ! Vous recevrez un email de confirmation.' : 
+                'تم تأكيد الطلب! ستتلقى بريد إلكتروني للتأكيد.');
+            
+            // Switch to tracking tab
+            switchTab('tracking');
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default tab
+            switchTab('cart');
+            
+            // Set default language
+            switchLanguage('fr');
+        });
+
+        // Quantity update functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('fa-plus') || e.target.classList.contains('fa-minus')) {
+                const isPlus = e.target.classList.contains('fa-plus');
+                const quantitySpan = isPlus ? 
+                    e.target.parentElement.previousElementSibling : 
+                    e.target.parentElement.nextElementSibling;
+                
+                let quantity = parseInt(quantitySpan.textContent);
+                if (isPlus) {
+                    quantity++;
+                } else if (quantity > 1) {
+                    quantity--;
+                }
+                quantitySpan.textContent = quantity;
+                
+                // Update cart count
+                updateCartCount();
+            }
+        });
+
+        function updateCartCount() {
+            const quantities = document.querySelectorAll('.mx-3.font-medium');
+            let total = 0;
+            quantities.forEach(span => {
+                total += parseInt(span.textContent);
+            });
+            document.getElementById('cartCount').textContent = total;
+        }
+
+        // Delivery option change handler
+        document.addEventListener('change', function(e) {
+            if (e.target.name === 'delivery') {
+                const deliveryFee = e.target.value === 'express' ? 120 : 50;
+                // Update delivery fee in summary (simplified for demo)
+                console.log('Delivery fee updated to:', deliveryFee, 'DHS');
+            }
+        });
+    </script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>
